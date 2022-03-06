@@ -297,66 +297,7 @@ function contactFormSetup() {
     });
 
 
-    $('#contact-form').on('submit', function(e) {
-        e.preventDefault();
-        var name = $('#cf-name').val(),
-            email = $('#cf-email').val(),
-            message = $('#cf-message').val(),
-            $messageBox = $('#contact-form .message'),
-            required = 0;
-
-
-        $('.cf-validate', this).each(function() {
-            if($(this).val() == '') {
-                $(this).addClass('cf-error');
-                required += 1;
-            } else {
-                if($(this).hasClass('cf-error')) {
-                    $(this).removeClass('cf-error');
-                    if(required > 0) {
-                        required -= 1;
-                    }
-                }
-            }
-        });
-        if( required === 0 ) {
-            $.ajax({
-                type: 'POST',
-                url: 'mail.php',
-                data: {
-                    cf_name: name,
-                    cf_email: email,
-                    cf_message: message
-                },
-                dataType: "json",
-                success: function(data) {
-                    console.log(data);
-                    showAlertBox(data.status, data.message);
-
-                    if(data.status === 200) {
-                        $("#contact-form .input__field").val("");
-                    }
-                },
-                error: function(data) {
-                    showAlertBox(data.status, data.message);
-                }
-            });
-        }
-    });
+    
 }
 
-
-/********** Function Show Alert Box **********/
-function showAlertBox(response, message) {
-    var $alertBox = $('<div class="alert"></div>'),
-        $alContainer = $('#contact-form .alert-container');
-    if( response == 200 ) {
-        $alertBox.addClass('alert-success').html(message);
-        $alContainer.html($alertBox);
-    } else {
-        $alertBox.addClass('alert-danger').html(message);
-        $alContainer.html($alertBox);
-    }
-    $alContainer.fadeIn(300).delay(4000).fadeOut(400);
-}
 
